@@ -1,0 +1,250 @@
+{
+ "_comment": "Regex rules shared by lab (measures LLM vs human rate) and CLI (matches). {W} = one letter: Python [^\\W\\d_], JS [\\p{L}\\p{Nl}\\p{No}]. Line ends: in Python only \\n ends a line for ^, $ and ., in JS \\r and U+2028 do too, so a rule that must agree at line ends uses (?<![^\\n]), (?![^\\n]) and [^\\n] instead. Flags: case-insensitive, multiline. baseline: typed = human chat messages (keeps markdown/typography as people type it); typeset = Leipzig sentences (edited text, no markdown). policy = always error, never measured away. mark=groups: only capturing groups are highlighted (markup markers), not the text between them. Patterns that start with a letter run are anchored at word starts ((?<!{W})) to stay linear on degenerate text.",
+ "patterns": [
+  {
+   "id": "dash.em",
+   "langs": [
+    "*"
+   ],
+   "kind": "typography",
+   "baseline": "typed",
+   "policy": true,
+   "regex": "\u2014",
+   "message": "Em dash (U+2014) is not allowed. Use a comma, colon, period or parentheses, or rebuild the sentence."
+  },
+  {
+   "id": "dash.en",
+   "langs": [
+    "*"
+   ],
+   "kind": "typography",
+   "baseline": "typed",
+   "regex": "\u2013",
+   "message": "En dash (U+2013): people type a hyphen."
+  },
+  {
+   "id": "quote.guillemets",
+   "langs": [
+    "ru"
+   ],
+   "kind": "typography",
+   "baseline": "typed",
+   "regex": "[«»]",
+   "message": "Guillemets: people type straight quotes."
+  },
+  {
+   "id": "quote.curly",
+   "langs": [
+    "*"
+   ],
+   "kind": "typography",
+   "baseline": "typed",
+   "regex": "[“”„‘’]",
+   "message": "Curly quotes: people type straight ones."
+  },
+  {
+   "id": "letter.yo",
+   "langs": [
+    "ru"
+   ],
+   "kind": "typography",
+   "baseline": "typed",
+   "regex": "(?<!{W})(?={W}*[ёЁ]){W}+",
+   "message": "Letter ё: people usually type е."
+  },
+  {
+   "id": "arrow",
+   "langs": [
+    "*"
+   ],
+   "kind": "typography",
+   "baseline": "typed",
+   "regex": "[→⇒←↔]",
+   "message": "Arrow instead of words."
+  },
+  {
+   "id": "ellipsis.char",
+   "langs": [
+    "*"
+   ],
+   "kind": "typography",
+   "baseline": "typed",
+   "regex": "…",
+   "message": "Ellipsis character instead of three dots."
+  },
+  {
+   "id": "md.bold",
+   "langs": [
+    "*"
+   ],
+   "kind": "markup",
+   "baseline": "typed",
+   "regex": "(\\*\\*)[^*\\n]+(\\*\\*)",
+   "message": "Bold text.",
+   "mark": "groups"
+  },
+  {
+   "id": "md.bold-label",
+   "langs": [
+    "*"
+   ],
+   "kind": "markup",
+   "baseline": "typed",
+   "regex": "^[ \\t]*(?:[-*\u2022]|\\d+[.)])[ \\t]+(\\*\\*)[^*\\n]+(\\*\\*)[ \\t]*([:.\u2014-])?",
+   "message": "List item with a bold label.",
+   "mark": "groups"
+  },
+  {
+   "id": "md.heading",
+   "langs": [
+    "*"
+   ],
+   "kind": "markup",
+   "baseline": "typed",
+   "regex": "^(#{1,6}[ \\t]+)\\S.*$",
+   "message": "Markdown heading.",
+   "mark": "groups"
+  },
+  {
+   "id": "md.bullet",
+   "langs": [
+    "*"
+   ],
+   "kind": "markup",
+   "baseline": "typed",
+   "regex": "^[ \\t]*[-*\u2022][ \\t]+",
+   "message": "Bulleted list item."
+  },
+  {
+   "id": "md.numbered",
+   "langs": [
+    "*"
+   ],
+   "kind": "markup",
+   "baseline": "typed",
+   "regex": "^[ \\t]*\\d+[.)][ \\t]+",
+   "message": "Numbered list item."
+  },
+  {
+   "id": "md.table",
+   "langs": [
+    "*"
+   ],
+   "kind": "markup",
+   "baseline": "typed",
+   "regex": "(?<![^\\n])[ \\t]*(\\|)(?!\\|)(?=[^\\n]*[^|\\s])[^\\n]*(?<!\\|)(\\|)[ \\t\\r]*(?![^\\n])",
+   "message": "Table row.",
+   "mark": "groups"
+  },
+  {
+   "id": "punct.colon-eol",
+   "langs": [
+    "*"
+   ],
+   "kind": "markup",
+   "baseline": "typed",
+   "regex": ":[ \\t]*$",
+   "message": "Line ending with a colon (lead-in to a list)."
+  },
+  {
+   "id": "punct.semicolon",
+   "langs": [
+    "*"
+   ],
+   "kind": "typography",
+   "baseline": "typed",
+   "regex": ";",
+   "message": "Semicolon."
+  },
+  {
+   "id": "emoji",
+   "langs": [
+    "*"
+   ],
+   "kind": "typography",
+   "baseline": "typed",
+   "regex": "[\\u{1F300}-\\u{1FAFF}\\u{2600}-\\u{27BF}\\u{2705}\\u{2714}\\u{2716}\\u{274C}]",
+   "message": "Emoji."
+  },
+  {
+   "id": "syn.not-just-but",
+   "langs": [
+    "ru"
+   ],
+   "kind": "syntax",
+   "baseline": "typeset",
+   "regex": "\\bне (?:просто|только|столько|лишь)\\b[^.!?\\n]{1,80}?,\\s*(?:а|но и)\\b",
+   "message": "'Not just X, but Y' construction."
+  },
+  {
+   "id": "syn.not-x-but-y",
+   "langs": [
+    "ru"
+   ],
+   "kind": "syntax",
+   "baseline": "typeset",
+   "regex": "\\bне {W}+(?: {W}+){0,3},\\s*а\\b",
+   "message": "'Not X, but Y' construction."
+  },
+  {
+   "id": "syn.eto-ne",
+   "langs": [
+    "ru"
+   ],
+   "kind": "syntax",
+   "baseline": "typeset",
+   "regex": "\\b(?:это|он|она|оно|они) не (?:про|о|об|просто|баг|ошибка){W}*",
+   "message": "'This is not about X' / 'this is not X': negation followed by a correction."
+  },
+  {
+   "id": "syn.triad",
+   "langs": [
+    "ru"
+   ],
+   "kind": "syntax",
+   "baseline": "typeset",
+   "regex": "(?<!{W}){W}+, {W}+(?: {W}+)?,? и {W}+",
+   "message": "Three-item list ('X, Y and Z')."
+  },
+  {
+   "id": "syn.not-just-but.en",
+   "langs": [
+    "en"
+   ],
+   "kind": "syntax",
+   "baseline": "typeset",
+   "regex": "\\bnot (?:just|only|merely|simply)\\b[^.!?\\n]{1,80}?(?:,|;)?\\s*(?:but|it's|it is)\\b",
+   "message": "'Not just X, but Y' construction."
+  },
+  {
+   "id": "syn.isnt-its",
+   "langs": [
+    "en"
+   ],
+   "kind": "syntax",
+   "baseline": "typeset",
+   "regex": "\\b(?:isn't|is not|wasn't|aren't)\\b[^.!?\\n]{1,60}?[,;]\\s*(?:it's|it is|they're|but)\\b",
+   "message": "'It isn't X, it's Y' construction."
+  },
+  {
+   "id": "syn.triad.en",
+   "langs": [
+    "en"
+   ],
+   "kind": "syntax",
+   "baseline": "typeset",
+   "regex": "(?<!{W}){W}+, {W}+(?: {W}+)?, (?:and|or) {W}+",
+   "message": "Three-item list ('X, Y, and Z')."
+  },
+  {
+   "id": "syn.colon-reveal",
+   "langs": [
+    "*"
+   ],
+   "kind": "syntax",
+   "baseline": "typeset",
+   "regex": "[^\\n:]{3,60}: (?:{W}+ ){0,3}{W}+[.!]",
+   "message": "Short lead-in with a colon and a reveal."
+  }
+ ]
+}

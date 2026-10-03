@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  node:
+    runs-on: ubuntu-latest
+    env:
+      # Tests and smoke runs use the tiny fixture packs; the real packs are build outputs that are not in git.
+      WRITEHUMAN_PACKS: cli/test/fixtures/packs
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm test
+      # The real packs are not in git: the fixture packs stand in for them, so the package listing shows whether
+      # "files" in package.json ships every file a pack is made of (a pack with "pairs" needs its .pairs.bin).
+      - name: Package contents
+        run: |
+          mkdir -p packs && cp cli/test/fixtures/packs/* packs/
+          npm pack --dry-run --ignore-scripts --json > "$RUNNER_TEMP/pack.json"
+          node --input-type=module -e '
+            import { readFileSync, readdirSync } from "node:fs";
+            const [{ files }] = JSON.parse(readFileSync(process.argv[1], "utf8"));
+            const shipped = new Set(files.map((f) => f.path));
+            const need = new Set(["LICENSE", "NOTICE", "README.md", "dist/writehuman.js", ...readdirSync("packs").map((f) => `packs/${f}`)]);
+            for (const f of readdirSync("packs").filter((f) => /^[a-z]{2,3}\.json$/.test(f))) {
+              if (JSON.parse(readFileSync(`packs/${f}`, "utf8")).pairs) need.add(`packs/${f.replace(/\.json$/, ".pairs.bin")}`);
+            }
+            const missing = [...need].filter((f) => !shipped.has(f));
+            if (missing.length) {
+              console.error(`not in the npm package: ${missing.join(", ")}`);
+              process.exit(1);
+            }
+            console.log(`${shipped.size} files, all pack files included`);
+          ' "$RUNNER_TEMP/pack.json"
+      # The published bundle promises Node 18 or newer: run it on Node 18.
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 18
+      - name: Bundle on Node 18
+        run: |
+          node --version
+          node dist/writehuman.js --version
+          node dist/writehuman.js check cli/test/fixtures/clean.md --lang en
+          node dist/writehuman.js check cli/test/fixtures/sample.md --format json > /dev/null && exit 1 || test $? -eq 1
+          printf 'one \342\200\224 two\n' | node dist/writehuman.js check - && exit 1 || test $? -eq 1
+          node dist/writehuman.js diff cli/test/fixtures/sample.md cli/test/fixtures/sample.md --format json
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m py_compile lab/*.py

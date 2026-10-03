@@ -1,0 +1,11 @@
+# language packs are large build outputs (lab/build.py); they ship in the npm package, not in git
+/packs/
+/dist/
+node_modules/
+*.tgz
+lab/data/
+lab/.venv/
+reports/
+__pycache__/
+*.pyc
+.DS_Store

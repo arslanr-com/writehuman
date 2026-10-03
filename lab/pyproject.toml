@@ -1,0 +1,15 @@
+[project]
+name = "writehuman-lab"
+version = "0.1.0"
+description = "Corpus statistics lab that builds the writehuman language packs and benchmarks the CLI"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = [
+    "wordfreq>=3.1",
+    "pymorphy3>=2.0",
+    "pymorphy3-dicts-ru",
+    "simplemma>=1.1",
+    "numpy>=1.26",
+    "zstandard>=0.22",
+    "pyarrow>=14",
+]

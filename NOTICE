@@ -1,0 +1,43 @@
+writehuman
+Copyright (c) 2026 writehuman contributors
+
+The code is licensed under the MIT License (see LICENSE).
+
+The language packs (packs/*.json, packs/*.pairs.bin) are built by lab/build.py, lab/build_docmodel.py,
+lab/tune_doc.py and lab/bench.py. They hold aggregate statistics only: rates and ratios of words, word sequences,
+word pairs and sentence templates, word forms and parts of speech, model parameters and score percentiles. No
+document text is included. The statistics are derived from the corpora and data below; each is used under the
+terms its publisher states.
+
+Human text written before 2022-11-30
+  - Leipzig Corpora Collection (news, Wikipedia and web corpora), Leipzig University.
+    https://wortschatz.uni-leipzig.de - terms of use as published there.
+  - FineWeb and FineWeb-2, Hugging Face (HuggingFaceFW/fineweb, HuggingFaceFW/fineweb-2).
+    Open Data Commons Attribution License (ODC-By) v1.0; subject to the Common Crawl terms of use.
+  - Stack Overflow posts from the Stack Exchange data dump (mikex86/stackoverflow-posts,
+    IlyaGusev/ru_stackoverflow). User contributions licensed under CC BY-SA (2.5, 3.0 or 4.0, depending on
+    when the post was written); the IlyaGusev/ru_stackoverflow card states CC BY-SA 2.5 for that dataset.
+  - The Pile (EleutherAI), uncopyrighted subset (monology/pile-uncopyrighted). The dataset card states the
+    license as "other"; the licenses of the components vary, see The Pile paper (arXiv:2101.00027).
+  - Pikabu posts and comments (IlyaGusev/pikabu). No license is stated on the dataset card.
+  - wordfreq, Robyn Speer. Code under the Apache License 2.0, data under CC BY-SA 4.0.
+
+LLM text, and the human texts paired with it in LLMTrace, HAP-E and SAGE (document style models, benchmark)
+  - LLMTrace (iitolstykh/LLMTrace_classification). Apache License 2.0.
+  - HAP-E, the Human-AI Parallel English corpus (browndw/human-ai-parallel-corpus). MIT License.
+  - SAGE (EndLessTime/SAGE). No license is stated on the dataset card.
+  - WildChat-4.8M (allenai/WildChat-4.8M), Allen Institute for AI. Open Data Commons Attribution License
+    (ODC-By) v1.0.
+
+Lemmatization (the word form and part-of-speech tables in the packs)
+  - simplemma, Adrien Barbaresi. MIT License. Its lemmatization data come from several sources, among them the
+    Lemmatization lists by Michal Měchura (Open Database License) and the Wikinflection corpus by Eleni
+    Metheniti (CC BY 4.0); see the simplemma credits.
+  - pymorphy3 (MIT License) with the pymorphy3-dicts-ru dictionaries, compiled from OpenCorpora
+    (https://opencorpora.org). Dictionary data under CC BY-SA 3.0.
+
+Attribution under ODC-By: the packs are Produced Works that contain content obtained from FineWeb, FineWeb-2 and
+WildChat-4.8M. Those databases are available under the Open Data Commons Attribution License v1.0,
+https://opendatacommons.org/licenses/by/1-0/.
+
+Dataset names in parentheses are Hugging Face dataset ids: https://huggingface.co/datasets/<id>.

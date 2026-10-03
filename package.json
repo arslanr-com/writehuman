@@ -1,0 +1,67 @@
+{
+  "name": "writehuman",
+  "version": "0.1.0",
+  "description": "Statistical linter that shows which parts of a text sound machine-made and by how much, measured on billions of words people wrote before 2022, so that coding agents can fix them",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "writehuman": "dist/writehuman.js"
+  },
+  "files": [
+    "dist/",
+    "packs/*.json",
+    "packs/*.pairs.bin",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arslanr-com/writehuman.git"
+  },
+  "homepage": "https://github.com/arslanr-com/writehuman#readme",
+  "bugs": {
+    "url": "https://github.com/arslanr-com/writehuman/issues"
+  },
+  "keywords": [
+    "llm",
+    "ai-writing",
+    "ai-text",
+    "ai-slop",
+    "slop",
+    "ai-detection",
+    "humanize",
+    "linter",
+    "lint",
+    "prose",
+    "writing",
+    "writing-style",
+    "style",
+    "markdown",
+    "english",
+    "nlp",
+    "corpus-linguistics",
+    "statistics",
+    "offline",
+    "cli",
+    "agent-skill",
+    "agent-skills",
+    "claude-code",
+    "codex",
+    "cursor"
+  ],
+  "scripts": {
+    "build": "node cli/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test cli/test/*.test.ts",
+    "prepack": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
+  }
+}
