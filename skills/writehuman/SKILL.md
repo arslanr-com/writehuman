@@ -16,35 +16,29 @@ Make the text sound like a person wrote it. Keep what it says.
 
 ## Setup
 
-See if the CLI is installed.
-
-```sh
-writehuman --version
-```
-
-If the command is not found, check Node.js. You need version 18 or newer. If `node` is missing too, ask the user to install it from https://nodejs.org and wait.
+Do this before every check, so the CLI is there and up to date. writehuman is on npm and needs Node.js 18 or newer. If `node` is missing, ask the user to install it from https://nodejs.org and wait.
 
 ```sh
 node --version
+writehuman --version          # the installed version, or "command not found"
+npm view writehuman version   # the newest version on npm
 ```
 
-Then install writehuman from the latest GitHub release. It is not on the npm registry, so install it from the URL below and not by name.
+- Not installed: run `npm install -g writehuman`.
+- Installed, and npm has a newer version: run `npm install -g writehuman@latest`. Skip this when you cannot write to npm's global folder (`test -w "$(npm prefix -g)/lib"` fails), for example when a container image or an admin pinned the CLI. Use the installed version then.
+- Same version, or `npm view` fails because there is no network: go on with what is installed.
+
+If an install fails with a permission error (EACCES), do not use sudo. When writehuman is already installed, keep using it. When it is not, put `npx -y writehuman@latest` in place of `writehuman` in every command in this file.
 
 ```sh
-npm install -g https://github.com/arslanr-com/writehuman/releases/latest/download/writehuman.tgz
+npx -y writehuman@latest check draft.md
+npx -y writehuman@latest diff original.md draft.md
 ```
 
-If that fails with a permission error (EACCES), do not use sudo. You can skip the install and put the npx part in front of every `writehuman` command in this file instead.
+On macOS and Linux there is one more way: install into a folder you own and add its `bin` to PATH. Run the same install again to update it.
 
 ```sh
-npx -y -p https://github.com/arslanr-com/writehuman/releases/latest/download/writehuman.tgz writehuman check draft.md
-npx -y -p https://github.com/arslanr-com/writehuman/releases/latest/download/writehuman.tgz writehuman diff original.md draft.md
-```
-
-On macOS and Linux there is one more way: install into a folder you own and add its `bin` to PATH.
-
-```sh
-npm install -g --prefix "$HOME/.local" https://github.com/arslanr-com/writehuman/releases/latest/download/writehuman.tgz
+npm install -g --prefix "$HOME/.local" writehuman@latest
 export PATH="$HOME/.local/bin:$PATH"
 ```
 

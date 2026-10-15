@@ -58,9 +58,9 @@ type PackFile = {
   pairs?: PairsFile;
 };
 
-// The package is not on the npm registry: it installs from the tarball of the latest GitHub release.
+// Installs from npm by name. The packs ship inside the package.
 const HINT = "Reinstall writehuman "
-  + "(npm install -g https://github.com/arslanr-com/writehuman/releases/latest/download/writehuman.tgz), "
+  + "(npm install -g writehuman@latest), "
   + "set WRITEHUMAN_PACKS to a folder with packs, or build packs with lab/build.py.";
 
 // WRITEHUMAN_PACKS wins. Otherwise the nearest "packs" folder above this module: the repository root when

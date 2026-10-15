@@ -196,8 +196,8 @@ describe("exit codes and usage", () => {
       assert.match(r.stderr, /no language pack for "en" \(available: none\)/);
       assert.ok(r.stderr.includes(` in ${empty}. `), r.stderr);
       assert.match(r.stderr, /Reinstall writehuman/);
-      // Not on the npm registry: the hint must name the release tarball, not a bare package name.
-      assert.ok(r.stderr.includes("npm install -g https://github.com/arslanr-com/writehuman/releases/latest/download/writehuman.tgz"), r.stderr);
+      // The hint reinstalls from npm by name, which brings the packs back.
+      assert.ok(r.stderr.includes("npm install -g writehuman@latest"), r.stderr);
       assert.match(r.stderr, /lab\/build\.py/);
     }
   });

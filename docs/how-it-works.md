@@ -178,7 +178,7 @@ The lab needs Python 3.11 or newer. `bench.py` runs the TypeScript source of the
 To score the released packs, install the CLI, fetch the public LLM corpora (this also downloads the held-out splits) and point `WRITEHUMAN_PACKS` at the installed packs:
 
 ```
-npm install -g https://github.com/arslanr-com/writehuman/releases/latest/download/writehuman.tgz
+npm install -g writehuman
 cd lab
 uv venv .venv && uv pip install --python .venv/bin/python -r pyproject.toml
 .venv/bin/python fetch_registers.py llm

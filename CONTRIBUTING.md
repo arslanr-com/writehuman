@@ -17,7 +17,7 @@ npm run build
 
 `npm run typecheck` runs `tsc --noEmit` over `cli/src` and `cli/test`. `npm test` uses `node --test` on `cli/test/`. Its tests read the tiny packs in `cli/test/fixtures/packs`, which means you can run them without real packs. `npm run build` bundles the CLI with esbuild into `dist/writehuman.js`, with `lab/patterns.json` and the package version inlined. When that file exists, one test makes sure it prints the same reports as the source code.
 
-To run the CLI from source you need packs, which are not in git. The release tarball contains them. After `npm install -g https://github.com/arslanr-com/writehuman/releases/latest/download/writehuman.tgz` you can point the source at the installed ones.
+To run the CLI from source you need packs, which are not in git. The release tarball contains them. After `npm install -g writehuman` you can point the source at the installed ones.
 
 ```bash
 WRITEHUMAN_PACKS="$(npm root -g)/writehuman/packs" node cli/src/cli.ts check draft.md
@@ -118,30 +118,36 @@ Code you contribute is released under the project's MIT license.
 
 ## Releasing
 
-Only the maintainer makes releases. Every install command in the docs and the Agent Skill uses one URL, `https://github.com/arslanr-com/writehuman/releases/latest/download/writehuman.tgz`. So does the hint the CLI prints when it finds no packs. The link breaks unless the latest release has an asset with exactly that file name. `npm pack` adds the version to the name. Packs are not in git either, so someone has to rename the tarball and upload it by hand.
+Only the maintainer makes releases. writehuman is on npm, and the docs, the Agent Skill and the hint the CLI prints when it finds no packs all install it by name, `npm install -g writehuman`. Packs are not in git, so a release is published from a tarball packed on the maintainer's machine. The GitHub release keeps a copy named `writehuman.tgz`, because installs made before writehuman was on npm point at `releases/latest/download/writehuman.tgz`.
 
 1. Build the packs from public corpora with the steps under "Full rebuild" in [lab/README.md](lab/README.md). With saved counts from an earlier `--public` build, `build.py --from-cache --public` can stand in for `build.py --public`. Finish with a full `bench.py` run. It writes the calibration files.
 2. Copy the new numbers into `README.md` and `docs/how-it-works.md`: the tables between the `<!-- bench -->` markers and the two verdict cut-offs. The human-like cut-off is also quoted under Style above.
 3. Set the version in `package.json` and add a section for it to `CHANGELOG.md`.
-4. Pack and rename. `npm pack` runs the build first, and the tarball is named after the version.
+4. Pack. `npm pack` runs the build first, and the tarball is named after the version.
 
 ```bash
 npm pack
-mv writehuman-0.1.0.tgz writehuman.tgz
 ```
 
-5. Create the release with the tarball attached. `releases/latest` ignores drafts and prereleases, so publish it as a normal release.
+5. Publish that tarball to npm. The npm account needs two-factor authentication to publish.
 
 ```bash
+npm publish writehuman-0.1.0.tgz
+```
+
+6. Create the GitHub release with a copy of the tarball named `writehuman.tgz`. `releases/latest` ignores drafts and prereleases, so publish it as a normal release.
+
+```bash
+cp writehuman-0.1.0.tgz writehuman.tgz
 gh release create v0.1.0 writehuman.tgz --title v0.1.0 --notes-file notes.md
 ```
 
 `notes.md` holds the new section of the changelog.
 
-6. Install from the link in a clean shell and run a check.
+7. Install from npm in a clean shell and run a check.
 
 ```bash
-npm install -g https://github.com/arslanr-com/writehuman/releases/latest/download/writehuman.tgz
+npm install -g writehuman@0.1.0
 writehuman --version
 writehuman check README.md --lang en
 ```

@@ -2,6 +2,11 @@
 
 What changed in each release, newest first.
 
+## Unreleased
+
+- writehuman is on npm. `npm install -g writehuman` installs it, and the docs, the Agent Skill and the missing-pack hint use that command now. The GitHub release still carries `writehuman.tgz`.
+- Before each run the Agent Skill compares the installed CLI with the newest version on npm and updates it when it can. A CLI it cannot write to, such as one pinned in a container image, stays as it is.
+
 ## 0.1.0
 
 First public release.

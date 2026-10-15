@@ -69,20 +69,20 @@ npx skills add arslanr-com/writehuman
 
 Add `-g` to install it for all your projects. The skills CLI works with Claude Code, Codex, Cursor and many other agents.
 
-Then ask for it in plain words. "Check this draft with writehuman" will do, or "make this sound more human". The first time it runs, the skill installs the CLI if needed (Node.js 18 or newer). From there it runs the check, rewrites whatever sentences got the most findings, and checks again. It stops once the verdict is human-like, after five passes, or when one more pass would barely change anything. At the end it compares the facts in both versions and puts back any number or name that went missing.
+Then ask for it in plain words. "Check this draft with writehuman" will do, or "make this sound more human". Before each run the skill installs the CLI from npm, or updates it when npm has a newer version (Node.js 18 or newer). That version lookup is its only network request, and your text stays on your computer. From there it runs the check, rewrites whatever sentences got the most findings, and checks again. It stops once the verdict is human-like, after five passes, or when one more pass would barely change anything. At the end it compares the facts in both versions and puts back any number or name that went missing.
 
 If a flagged word is the right term for the subject, your agent keeps it. A rewrite also never weakens a "no", an "only" or an "unless". The whole loop is spelled out in [skills/writehuman/SKILL.md](skills/writehuman/SKILL.md).
 
 ## Using the CLI directly
 
 ```bash
-npm install -g https://github.com/arslanr-com/writehuman/releases/latest/download/writehuman.tgz
+npm install -g writehuman
 ```
 
-You need Node.js 18 or newer. To try it once without installing:
+You need Node.js 18 or newer. `npm install -g writehuman@latest` updates it. To try it once without installing:
 
 ```bash
-npx -y -p https://github.com/arslanr-com/writehuman/releases/latest/download/writehuman.tgz writehuman check draft.md
+npx -y writehuman check draft.md
 ```
 
 Typical runs:
